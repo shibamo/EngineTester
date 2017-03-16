@@ -38,6 +38,7 @@ namespace EngineTester
       bool testCreateFlowActionMoveTo_3 = false;
       bool testCreateFlowActionMoveTo_4 = false;
       bool testCreateFlowActionRejectToStart = false;
+      bool testCreateFlowActionJumpTo_1 = true;
       //bool testCreateFlowActionTake = false;
       //bool testCreateFlowActionInviteOther = false;
       //bool testCreateFlowActionFeedBackOfInvite = false;
@@ -48,7 +49,7 @@ namespace EngineTester
       // OPAS2Model
       bool testBizDocumentSerialNoGenerator = false;
       bool testCreatePR = false;
-      bool testGenerateBizDataPayloadJson = true;
+      bool testGenerateBizDataPayloadJson = false;
 
       #region Test OrgMgmtLib
 
