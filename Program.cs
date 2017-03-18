@@ -7,6 +7,13 @@ using System.IO;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using System.Reflection;
+using System.Dynamic;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Scripting;
 
 using EnouFlowTemplateLib;
 using EnouFlowOrgMgmtLib;
@@ -15,7 +22,6 @@ using EnouFlowInstanceLib;
 using OPAS2Model;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
-using System.Dynamic;
 
 namespace EngineTester
 {
@@ -38,7 +44,7 @@ namespace EngineTester
       bool testCreateFlowActionMoveTo_3 = false;
       bool testCreateFlowActionMoveTo_4 = false;
       bool testCreateFlowActionRejectToStart = false;
-      bool testCreateFlowActionJumpTo_1 = true;
+      bool testCreateFlowActionJumpTo_1 = false;
       //bool testCreateFlowActionTake = false;
       //bool testCreateFlowActionInviteOther = false;
       //bool testCreateFlowActionFeedBackOfInvite = false;
@@ -50,6 +56,9 @@ namespace EngineTester
       bool testBizDocumentSerialNoGenerator = false;
       bool testCreatePR = false;
       bool testGenerateBizDataPayloadJson = false;
+
+      // FlowDynamicUser
+      bool testFlowDynamicUser = true;
 
       #region Test OrgMgmtLib
 
@@ -221,22 +230,22 @@ namespace EngineTester
       {
         using (var db = new EnouFlowOrgMgmtContext())
         {
-          if (db.systemManagers.Count() <= 0)
-          {
-            var _sysmgr = db.systemManagers.Create();
-            _sysmgr.name = "系统管理员";
-            _sysmgr.logonName = "sys";
-            _sysmgr.logonSalt = "f6152039-1745-4f4c-8f8e-3ed37770fa0d";
-            _sysmgr.logonPasswordHash = Convert.ToBase64String(
-              new System.Security.Cryptography.SHA256Managed().ComputeHash(
-                Encoding.UTF8.GetBytes(
-                  "111111" + //测试密码
-                  "f6152039-1745-4f4c-8f8e-3ed37770fa0d")));
+          //if (db.systemManagers.Count() <= 0)
+          //{
+          //  var _sysmgr = db.systemManagers.Create();
+          //  _sysmgr.name = "系统管理员";
+          //  _sysmgr.logonName = "sys";
+          //  _sysmgr.logonSalt = "f6152039-1745-4f4c-8f8e-3ed37770fa0d";
+          //  _sysmgr.logonPasswordHash = Convert.ToBase64String(
+          //    new System.Security.Cryptography.SHA256Managed().ComputeHash(
+          //      Encoding.UTF8.GetBytes(
+          //        "111111" + //测试密码
+          //        "f6152039-1745-4f4c-8f8e-3ed37770fa0d")));
 
-            db.systemManagers.Add(_sysmgr);
-            db.SaveChanges();
-            Console.WriteLine("成功创建系统管理员");
-          }
+          //  db.systemManagers.Add(_sysmgr);
+          //  db.SaveChanges();
+          //  Console.WriteLine("成功创建系统管理员");
+          //}
         }
       }
 
@@ -401,7 +410,6 @@ namespace EngineTester
 
       #endregion 
 
-
       #region TODO: Test Create FlowActionInviteOther
       #endregion 
 
@@ -521,6 +529,41 @@ namespace EngineTester
           Console.WriteLine(s);
         }
       }
+      #endregion
+
+      #region testFlowDynamicUser
+      Console.Out.WriteLine("Enter into script:");
+      var _session = new DictionaryContext();
+      var flowInstDb = new EnouFlowInstanceContext();
+      var flowInstance = FlowInstanceHelper.GetFlowInstance(42, flowInstDb);
+
+      _session.globals.Add("flowInstance", flowInstance);
+      var _references = new Assembly[] { typeof(DictionaryContext).Assembly,
+                             typeof(System.Runtime.CompilerServices.DynamicAttribute).Assembly,
+                             typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly,
+                             typeof(ExpandoObject).Assembly,
+                             typeof(JsonConvert).Assembly,
+                             typeof(ExpandoObjectConverter).Assembly,
+                             typeof(Paticipant).Assembly,
+                             typeof(UserDTO).Assembly,
+                             typeof(FlowInstance).Assembly,
+      };
+      var _imports = new string[] {typeof(DictionaryContext).Namespace,
+                          typeof(System.Runtime.CompilerServices.DynamicAttribute).Namespace,
+                          typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Namespace,
+                          typeof(ExpandoObject).Namespace,
+                          typeof(JsonConvert).Namespace,
+                          typeof(ExpandoObjectConverter).Namespace,
+                          typeof(Paticipant).Namespace,
+                          typeof(UserDTO).Namespace,
+                          typeof(FlowInstance).Namespace
+      };
+      var _options = ScriptOptions.Default
+        .AddReferences(_references)
+        .AddImports(_imports);
+      var code = @"return OrgMgmtDBHelper.getUserDTO(((FlowInstance)globals[""flowInstance""]).creatorId);";
+      var result1 = CSharpScript.RunAsync(code, globals: _session, options: _options).Result;
+
       #endregion
 
       Console.WriteLine("All done!");
