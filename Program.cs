@@ -331,7 +331,7 @@ namespace EngineTester
               new PaticipantDigest(
               "李四",
               "27bcd361-12c7-4376-8dd8-ce68ad964431",
-              2,null)
+              2,null,null)
               )
           }
         );
@@ -353,7 +353,7 @@ namespace EngineTester
               new PaticipantDigest(
               "王五",
               "f17004ea-1246-40df-9f48-2adf0cfa8517",
-              3,null)
+              3,null,null)
               )
           }
         );
@@ -375,7 +375,7 @@ namespace EngineTester
               new PaticipantDigest(
               "张三",
               "85a14f4d-e68e-4684-88b2-3bf9dea386e6",
-              1,null)
+              1,null,null)
               )
           }
         );
@@ -547,6 +547,7 @@ namespace EngineTester
                              typeof(Paticipant).Assembly,
                              typeof(UserDTO).Assembly,
                              typeof(FlowInstance).Assembly,
+                             typeof(List<>).Assembly
       };
       var _imports = new string[] {typeof(DictionaryContext).Namespace,
                           typeof(System.Runtime.CompilerServices.DynamicAttribute).Namespace,
@@ -556,13 +557,18 @@ namespace EngineTester
                           typeof(ExpandoObjectConverter).Namespace,
                           typeof(Paticipant).Namespace,
                           typeof(UserDTO).Namespace,
-                          typeof(FlowInstance).Namespace
+                          typeof(FlowInstance).Namespace,
+                          typeof(List<>).Namespace
       };
       var _options = ScriptOptions.Default
         .AddReferences(_references)
         .AddImports(_imports);
-      var code = @"return OrgMgmtDBHelper.getUserDTO(((FlowInstance)globals[""flowInstance""]).creatorId);";
-      var result1 = CSharpScript.RunAsync(code, globals: _session, options: _options).Result;
+      var code = @"var result = new List<UserDTO>(); 
+                    result.Add(OrgMgmtDBHelper.getUserDTO(((FlowInstance)globals[""flowInstance""]).creatorId));
+                    return result;";
+      var result1 = CSharpScript.RunAsync(code, 
+        globals: _session, options: _options).Result.ReturnValue;
+      var retList = (List<UserDTO>) result1;
 
       #endregion
 
