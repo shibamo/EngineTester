@@ -563,9 +563,21 @@ namespace EngineTester
       var _options = ScriptOptions.Default
         .AddReferences(_references)
         .AddImports(_imports);
-      var code = @"var result = new List<UserDTO>(); 
-                    result.Add(OrgMgmtDBHelper.getUserDTO(((FlowInstance)globals[""flowInstance""]).creatorId));
-                    return result;";
+      //var code = @"var result = new List<UserDTO>(); 
+      //              result.Add(OrgMgmtDBHelper.getUserDTO(((FlowInstance)globals[""flowInstance""]).creatorId));
+      //              return result;";
+      var retShouldBe = OrgMgmtDBHelper.getUserDTOsOfPositionInDepartment(
+        OrgMgmtDBHelper.getUserDefaultDepartment(flowInstance.creatorId).departmentId, 
+        UserPositionToDepartment.manager);
+      var code = @"
+      FlowInstance flowInstance = (FlowInstance)globals[""flowInstance""];
+      Department department = OrgMgmtDBHelper.getUserDefaultDepartment(flowInstance.creatorId);
+      if(department!=null){
+        return OrgMgmtDBHelper.getUserDTOsOfPositionInDepartment(
+              department.departmentId, UserPositionToDepartment.manager);
+      }else{
+        return null;
+      }";
       var result1 = CSharpScript.RunAsync(code, 
         globals: _session, options: _options).Result.ReturnValue;
       var retList = (List<UserDTO>) result1;
