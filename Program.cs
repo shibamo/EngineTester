@@ -58,7 +58,7 @@ namespace EngineTester
       bool testGenerateBizDataPayloadJson = false;
 
       // FlowDynamicUser
-      bool testFlowDynamicUser = true;
+      bool testFlowDynamicUser = false;
 
       #region Test OrgMgmtLib
 
@@ -333,7 +333,9 @@ namespace EngineTester
               "27bcd361-12c7-4376-8dd8-ce68ad964431",
               2,null,null)
               )
-          }
+          },
+          null,
+          null
         );
       }
 
@@ -355,7 +357,9 @@ namespace EngineTester
               "f17004ea-1246-40df-9f48-2adf0cfa8517",
               3,null,null)
               )
-          }
+          }, 
+          null,
+          null
         );
       }
 
@@ -377,7 +381,9 @@ namespace EngineTester
               "85a14f4d-e68e-4684-88b2-3bf9dea386e6",
               1,null,null)
               )
-          }
+          },
+          null,
+          null
         );
       }
 
@@ -392,7 +398,9 @@ namespace EngineTester
           "5ee19a5b-df8b-4c11-a0d4-082848b5f216",
           "0dade9b8-acc9-4223-8dab-9d55480722a8",
           "c09fcfbe-92a9-48cd-bd14-975996e063a7",
-          new List<Paticipant>()
+          new List<Paticipant>(),
+          null,
+          null
         //{
         //  new Paticipant("user",
         //    new PaticipantDigest(
