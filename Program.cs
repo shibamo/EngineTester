@@ -69,17 +69,23 @@ namespace EngineTester
         {
           // var DBHelper = DBHelper;
 
-          var _org = OrgMgmtDBHelper.createOrg(db);
+          var orgHelper = new OrgHelper(db);
+
+          var _org = orgHelper.createObject();
           _org.name = "CQAC集团";
-          OrgMgmtDBHelper.saveCreatedOrg(_org, db);
+          orgHelper.saveCreatedObject(_org);
 
-          var _orgSchema = OrgMgmtDBHelper.createOrgSchema(db);
+          var orgSchemaHelper = new OrgSchemaHelper(db);
+
+          var _orgSchema = orgSchemaHelper.createObject();
           _orgSchema.name = "默认组织结构方案";
-          OrgMgmtDBHelper.saveCreatedOrgSchema(_org, _orgSchema, db);
+          _orgSchema.Org = _org;
+          orgSchemaHelper.saveCreatedObject(_orgSchema);
 
-          var _bizEntity = OrgMgmtDBHelper.createBizEntity(db);
+          var bizEntityHelper = new BizEntityHelper(db);
+          var _bizEntity = bizEntityHelper.createObject();
           _bizEntity.name = "Qoros汽车有限公司";
-          OrgMgmtDBHelper.saveCreatedBizEntity(_orgSchema, _bizEntity, null, db);
+          bizEntityHelper.saveCreatedObject(_orgSchema, _bizEntity, null);
 
           //var _bizEntityChild = OrgMgmtDBHelper.createBizEntity(db);
           //_bizEntityChild.name = "上海总部";
@@ -89,61 +95,65 @@ namespace EngineTester
           //_bizEntityChild2.name = "常熟生产基地";
           //OrgMgmtDBHelper.saveCreatedBizEntity(_orgSchema, _bizEntityChild2, _bizEntity, db);
 
-          var _bizEntitySchema = OrgMgmtDBHelper.createBizEntitySchema(db);
+          BizEntitySchemaHelper bizEntitySchemaHelper = new BizEntitySchemaHelper(db);
+          var _bizEntitySchema = bizEntitySchemaHelper.createObject();
           _bizEntitySchema.name = "Qoros默认公司架构";
-          OrgMgmtDBHelper.saveCreatedBizEntitySchema(_bizEntitySchema, _bizEntity, db);
+          _bizEntitySchema.BizEntity = _bizEntity;
+          bizEntitySchemaHelper.saveCreatedObject(_bizEntitySchema);
 
-          var _department0 = OrgMgmtDBHelper.createDepartment(db);
+          DepartmentHelper departmentHelper = new DepartmentHelper(db);
+          var _department0 = departmentHelper.createObject();
           _department0.name = "董事会";
-          OrgMgmtDBHelper.saveCreatedDepartment(_bizEntitySchema, _department0, null, db);
+          departmentHelper.saveCreatedObject(_bizEntitySchema, _department0, null);
 
-          //var _department = OrgMgmtDBHelper.createDepartment(db) ;
+          //var _department = departmentHelper.createObject() ;
           //_department.name = "后台部门";
           //OrgMgmtDBHelper.saveCreatedDepartment(_bizEntitySchema, _department, null, db);
 
-          var _department1 = OrgMgmtDBHelper.createDepartment(db);
+          var _department1 = departmentHelper.createObject();
           _department1.name = "产品部";
-          OrgMgmtDBHelper.saveCreatedDepartment(_bizEntitySchema, _department1, null, db);
+          departmentHelper.saveCreatedObject(_bizEntitySchema, _department1, null);
 
-          var _departmentChild = OrgMgmtDBHelper.createDepartment(db);
+          var _departmentChild = departmentHelper.createObject();
           _departmentChild.name = "财务部";
-          OrgMgmtDBHelper.saveCreatedDepartment(_bizEntitySchema,
-            _departmentChild, null, db);
+          departmentHelper.saveCreatedObject(_bizEntitySchema, _departmentChild, null);
 
-          var _user = OrgMgmtDBHelper.createUser(db);
+          UserHelper userHelper = new UserHelper(db);
+          var _user = userHelper.createObject();
           _user.name = "张三";
-          OrgMgmtDBHelper.saveCreatedUser(_user, db);
+          userHelper.saveCreatedObject(_user);
 
-          var _user2 = OrgMgmtDBHelper.createUser(db);
+          var _user2 = userHelper.createObject();
           _user2.name = "李四";
-          OrgMgmtDBHelper.saveCreatedUser(_user2, db);
+          userHelper.saveCreatedObject(_user2);
 
-          var _user3 = OrgMgmtDBHelper.createUser(db);
+          var _user3 = userHelper.createObject();
           _user3.name = "王五";
-          OrgMgmtDBHelper.saveCreatedUser(_user3, db);
+          userHelper.saveCreatedObject(_user3);
 
-          OrgMgmtDBHelper.saveDepartmentUserRelation(_departmentChild, _user, db);
-          OrgMgmtDBHelper.saveDepartmentUserRelation(_departmentChild, _user2, db);
-          OrgMgmtDBHelper.saveDepartmentUserRelation(_department1, _user3, db);
+          userHelper.createDepartmentUserRelation(_departmentChild, _user);
+          userHelper.createDepartmentUserRelation(_departmentChild, _user2);
+          userHelper.createDepartmentUserRelation(_department1, _user3);
 
-          var _role = OrgMgmtDBHelper.createRole(db);
+          RoleHelper roleHelper = new RoleHelper(db);
+          var _role = roleHelper.createObject();
           _role.name = "系统管理员";
-          OrgMgmtDBHelper.saveCreatedRole(_role, db);
+          roleHelper.saveCreatedObject(_role);
 
-          var _role1 = OrgMgmtDBHelper.createRole(db);
+          var _role1 = roleHelper.createObject();
           _role1.name = "CXOs";
-          OrgMgmtDBHelper.saveCreatedRole(_role1, db);
+          roleHelper.saveCreatedObject(_role1);
 
-          OrgMgmtDBHelper.saveCreatedRoleUserRelation(_role, _user, db);
-          OrgMgmtDBHelper.saveCreatedRoleUserRelation(_role1, _user, db);
+          userHelper.setUserRole(_user.userId, _role);
+          userHelper.setUserRole(_user.userId, _role1);
+          userHelper.setUserRole(_user2.userId, _role1);
 
-          OrgMgmtDBHelper.saveCreatedRoleUserRelation(_role1, _user2, db);
-
-          var _roleType = OrgMgmtDBHelper.createRoleType(db);
+          RoleTypeHelper roleTypeHelper = new RoleTypeHelper(db);
+          RoleType _roleType = roleTypeHelper.createObject();
           _roleType.name = "系统";
-          OrgMgmtDBHelper.saveCreatedRoleType(_roleType, db);
+          roleTypeHelper.saveCreatedObject(_roleType);
 
-          OrgMgmtDBHelper.saveCreatedRole_RoleTypeRelation(_role, _roleType, db);
+          roleHelper.createRole_RoleTypeRelation(_role, _roleType);
         }
       }
       #endregion
@@ -574,9 +584,13 @@ namespace EngineTester
       //var code = @"var result = new List<UserDTO>(); 
       //              result.Add(OrgMgmtDBHelper.getUserDTO(((FlowInstance)globals[""flowInstance""]).creatorId));
       //              return result;";
-      var retShouldBe = OrgMgmtDBHelper.getUserDTOsOfPositionInDepartment(
-        OrgMgmtDBHelper.getUserDefaultDepartment(flowInstance.creatorId).departmentId, 
-        UserPositionToDepartment.manager);
+
+      using (var db = new EnouFlowOrgMgmtContext())
+      {
+        var retShouldBe = new DepartmentHelper(db).getUserDTOsOfPositionInDepartment(
+          new UserHelper(db).getUserDefaultDepartment(flowInstance.creatorId).departmentId,
+          UserPositionToDepartment.manager);
+      }
       var code = @"
       FlowInstance flowInstance = (FlowInstance)globals[""flowInstance""];
       Department department = OrgMgmtDBHelper.getUserDefaultDepartment(flowInstance.creatorId);
