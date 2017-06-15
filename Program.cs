@@ -293,14 +293,21 @@ namespace EngineTester
         var flowTemplateDefTest = JsonHelper.DeserializeJsonToObject<FlowTemplateDef>(
           tplJson);
 
-        var tpl = FlowTemplateDBHelper.createFlowTemplate();
-
-        tpl.guid = flowTemplateDefTest.basicInfo.guid;
-        tpl.name = flowTemplateDefTest.basicInfo.name;
-        tpl.displayName = flowTemplateDefTest.basicInfo.displayName;
-        tpl.version = flowTemplateDefTest.basicInfo.version;
-        tpl.code = "PM";
-        tpl.flowTemplateJson = tplJson;
+        Tuple<bool, FlowTemplate, List<string>> result = FlowTemplateDBHelper.createFlowTemplate(
+          flowTemplateDefTest.basicInfo.guid,
+          flowTemplateDefTest.basicInfo.name,
+          flowTemplateDefTest.basicInfo.displayName,
+          flowTemplateDefTest.basicInfo.version,
+          "PM",
+          tplJson
+          );
+        var tpl = result.Item2;
+        //tpl.guid = flowTemplateDefTest.basicInfo.guid;
+        //tpl.name = flowTemplateDefTest.basicInfo.name;
+        //tpl.displayName = flowTemplateDefTest.basicInfo.displayName;
+        //tpl.version = flowTemplateDefTest.basicInfo.version;
+        //tpl.code = "PM";
+        //tpl.flowTemplateJson = tplJson;
 
         FlowTemplateDBHelper.saveCreatedFlowTemplate(tpl);
         Console.WriteLine("成功创建流程定义模板");
