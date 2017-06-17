@@ -320,7 +320,7 @@ namespace EngineTester
       #region Test Create FlowActionStart
       if (testCreateFlowActionStart)
       {
-        var actionStart = FlowInstanceHelper.PostFlowActionStart(
+        var actionStart = FlowActionHelper.PostFlowActionStart(
           "aaaaaaa-1745-4f4c-8f8e-3ed37770fa0d",
           "bizDocumentGuid", "PR",
           "用户输入的备注内容aaa", null, null, 1,
@@ -333,7 +333,7 @@ namespace EngineTester
       #region Test Create FlowActionMoveTo
       if (testCreateFlowActionMoveTo_1)
       {
-        var action1 = FlowInstanceHelper.PostFlowActionMoveTo(
+        var action1 = FlowActionHelper.PostFlowActionMoveTo(
           "bbbbbbb-1745-4f4c-8f8e-3ed37770fa0d",
           "bizDocumentGuid", "PR",
           DateTime.Now.AddSeconds(1), "用户输入的备注内容bbb",
@@ -358,7 +358,7 @@ namespace EngineTester
 
       if (testCreateFlowActionMoveTo_2)
       {
-        var action2 = FlowInstanceHelper.PostFlowActionMoveTo(
+        var action2 = FlowActionHelper.PostFlowActionMoveTo(
           "cccccc-1745-4f4c-8f8e-3ed37770fa0d",
           "bizDocumentGuid", "PR",
           DateTime.Now.AddSeconds(2),
@@ -382,7 +382,7 @@ namespace EngineTester
 
       if (testCreateFlowActionMoveTo_3)
       {
-        var action3 = FlowInstanceHelper.PostFlowActionMoveTo(
+        var action3 = FlowActionHelper.PostFlowActionMoveTo(
           "dddddd-1745-4f4c-8f8e-3ed37770fa0d",
           "bizDocumentGuid", "PR",
           DateTime.Now.AddSeconds(3),
@@ -406,7 +406,7 @@ namespace EngineTester
 
       if (testCreateFlowActionMoveTo_4)
       {
-        var action4 = FlowInstanceHelper.PostFlowActionMoveTo(
+        var action4 = FlowActionHelper.PostFlowActionMoveTo(
           "eeeeee-1745-4f4c-8f8e-3ed37770fa0d",
           "bizDocumentGuid", "PR",
           DateTime.Now.AddSeconds(4),
